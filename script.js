@@ -3,6 +3,7 @@ const heartContent = document.getElementById('heartContent');
 const timerDisplay = document.getElementById('timer');
 const loveMessage = document.getElementById('loveMessage');
 const backgroundStars = document.getElementById('backgroundStars');
+const smallHeartsContainer = document.getElementById('smallHeartsContainer');
 
 let isHeartClicked = false;
 const startDate = new Date('2025-02-25T00:00:00');
@@ -12,17 +13,25 @@ mainHeart.addEventListener('click', () => {
         isHeartClicked = true;
 
         mainHeart.classList.add('active');
+        mainHeart.style.pointerEvents = 'none';
+
         document.body.classList.add('pink-mode');
-        
+        backgroundStars.classList.add('blurred');
+
         setTimeout(() => {
-            heartContent.style.opacity = '1';
+            heartContent.classList.add('show');
             loveMessage.classList.add('show');
             startTimer();
-        }, 600);
+        }, 800);
 
         createSmallHearts();
     }
 });
+
+function startTimer() {
+    updateTimer();
+    setInterval(updateTimer, 1000);
+}
 
 function updateTimer() {
     const now = new Date();
@@ -36,32 +45,26 @@ function updateTimer() {
     timerDisplay.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 }
 
-function startTimer() {
-    updateTimer();
-    setInterval(updateTimer, 1000);
-}
-
 function createSmallHearts() {
-    const container = document.getElementById('smallHeartsContainer');
-    for (let i = 0; i < 25; i++) {
-        const heart = document.createElement('div');
-        heart.className = 'small-heart';
-        
-        // Estilização dinâmica via JS para os mini corações
-        const size = Math.random() * 15 + 10;
-        heart.style.width = `${size}px`;
-        heart.style.height = `${size}px`;
-        heart.style.left = '50%';
-        heart.style.top = '50%';
-        
-        const moveX = (Math.random() - 0.5) * 300;
-        const moveY = (Math.random() - 0.5) * 300;
-        
-        heart.style.setProperty('--move-x', `${moveX}px`);
-        heart.style.setProperty('--move-y', `${moveY}px`);
-        heart.style.animationDelay = `${Math.random() * 0.5}s`;
+    const numberOfHearts = 20;
+    const containerRect = document.body.getBoundingClientRect();
+    const centerX = containerRect.width / 2;
+    const centerY = containerRect.height / 2;
 
-        container.appendChild(heart);
-        setTimeout(() => heart.remove(), 3000);
+    for (let i = 0; i < numberOfHearts; i++) {
+        const smallHeart = document.createElement('div');
+        smallHeart.classList.add('small-heart');
+
+        smallHeart.style.left = `${centerX + (Math.random() - 0.5) * 50}px`;
+        smallHeart.style.top = `${centerY + (Math.random() - 0.5) * 50}px`;
+        
+        smallHeart.style.setProperty('--random-x', `${(Math.random() - 0.5) * 400}px`);
+        smallHeart.style.animationDelay = `${i * 0.1}s`; 
+        
+        smallHeartsContainer.appendChild(smallHeart);
+
+        smallHeart.addEventListener('animationend', () => {
+            smallHeart.remove();
+        });
     }
 }
