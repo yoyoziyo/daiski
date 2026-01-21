@@ -1,62 +1,67 @@
 const mainHeart = document.getElementById('mainHeart');
-const loveMessage = document.getElementById('loveMessage');
+const heartContent = document.getElementById('heartContent');
 const timerDisplay = document.getElementById('timer');
-const stars = document.getElementById('backgroundStars');
-const container = document.getElementById('smallHeartsContainer');
+const loveMessage = document.getElementById('loveMessage');
+const backgroundStars = document.getElementById('backgroundStars');
 
-let hasClicked = false;
+let isHeartClicked = false;
 const startDate = new Date('2025-02-25T00:00:00');
 
 mainHeart.addEventListener('click', () => {
-    if (!hasClicked) {
-        hasClicked = true;
+    if (!isHeartClicked) {
+        isHeartClicked = true;
 
-        // Ativação das animações
         mainHeart.classList.add('active');
         document.body.classList.add('pink-mode');
-        stars.classList.add('blurred');
-        loveMessage.classList.add('show');
+        
+        setTimeout(() => {
+            heartContent.style.opacity = '1';
+            loveMessage.classList.add('show');
+            startTimer();
+        }, 600);
 
-        startTimer();
-        createExplosion();
+        createSmallHearts();
     }
 });
 
-function startTimer() {
-    const update = () => {
-        const now = new Date();
-        const diff = now - startDate;
+function updateTimer() {
+    const now = new Date();
+    const diff = now - startDate;
 
-        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        const m = Math.floor((diff / (1000 * 60)) % 60);
-        const s = Math.floor((diff / 1000) % 60);
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
 
-        timerDisplay.innerHTML = `${d}D ${h}H ${m}M ${s}S`;
-    };
-    update();
-    setInterval(update, 1000);
+    timerDisplay.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 }
 
-function createExplosion() {
-    for (let i = 0; i < 50; i++) {
-        setTimeout(() => {
-            const h = document.createElement('div');
-            h.className = 'small-heart';
-            h.style.left = '50%';
-            h.style.top = '50%';
-            
-            // Explosão em 360 graus
-            const angle = Math.random() * Math.PI * 2;
-            const dist = 300 + Math.random() * 400;
-            const tx = Math.cos(angle) * dist + 'px';
-            const ty = Math.sin(angle) * dist + 'px';
-            
-            h.style.setProperty('--tx', tx);
-            h.style.setProperty('--ty', ty);
-            
-            container.appendChild(h);
-            setTimeout(() => h.remove(), 3000);
-        }, i * 30);
+function startTimer() {
+    updateTimer();
+    setInterval(updateTimer, 1000);
+}
+
+function createSmallHearts() {
+    const container = document.getElementById('smallHeartsContainer');
+    for (let i = 0; i < 25; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'small-heart';
+        
+        // Estilização dinâmica via JS para os mini corações
+        const size = Math.random() * 15 + 10;
+        heart.style.width = `${size}px`;
+        heart.style.height = `${size}px`;
+        heart.style.left = '50%';
+        heart.style.top = '50%';
+        
+        const moveX = (Math.random() - 0.5) * 300;
+        const moveY = (Math.random() - 0.5) * 300;
+        
+        heart.style.setProperty('--move-x', `${moveX}px`);
+        heart.style.setProperty('--move-y', `${moveY}px`);
+        heart.style.animationDelay = `${Math.random() * 0.5}s`;
+
+        container.appendChild(heart);
+        setTimeout(() => heart.remove(), 3000);
     }
 }
