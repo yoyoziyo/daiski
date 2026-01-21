@@ -1,38 +1,39 @@
 const heart = document.getElementById('heartIcon');
-const container = document.getElementById('mainContainer');
 const content = document.getElementById('content');
 const timerDisplay = document.getElementById('timer');
+const loveText = document.getElementById('loveText');
 
-let clicked = false;
+let isClicked = false;
 
-heart.addEventListener('click', function() {
-    if (!clicked) {
-        clicked = true;
-        heart.classList.add('clicked-heart');
-        document.body.classList.add('pink-bg');
+heart.addEventListener('click', () => {
+    if (!isClicked) {
+        isClicked = true;
         
-        // Mostra o texto após a animação do coração
+        // Aplica os efeitos visuais
+        document.body.classList.add('bg-pink');
+        heart.classList.add('active');
+        
         setTimeout(() => {
-            content.classList.remove('hidden');
-            heart.appendChild(content); // Coloca o texto dentro do coração
-        }, 300);
+            content.classList.add('show');
+            loveText.classList.add('show');
+        }, 500);
 
-        iniciarContador();
+        startTimer();
     }
 });
 
-function iniciarContador() {
-    const dataInicio = new Date('2025-02-25T00:00:00');
+function startTimer() {
+    const startDate = new Date('2025-02-25T00:00:00');
 
     setInterval(() => {
-        const agora = new Date();
-        const diferenca = agora - dataInicio;
+        const now = new Date();
+        const diff = now - startDate;
 
-        const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
-        const horas = Math.floor((diferenca / (1000 * 60 * 60)) % 24);
-        const minutos = Math.floor((diferenca / 1000 / 60) % 60);
-        const segundos = Math.floor((diferenca / 1000) % 60);
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
 
-        timerDisplay.innerHTML = `${dias}d ${horas}h ${minutos}m ${segundos}s`;
+        timerDisplay.innerHTML = `${d}d ${h}h ${m}m ${s}s`;
     }, 1000);
 }
