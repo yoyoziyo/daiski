@@ -1,91 +1,229 @@
+:root {
+    --dark-bg: #0a0a1a;
+    --pink-accent: #ff007f;
+    --pink-light: #ff69b4;
+    --glow-color: #ff33a3;
+    --text-color: #e0e0e0;
+}
+
 body, html {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
+    overflow: hidden; /* Garante que nada saia das bordas */
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #1a1a1a;
-    transition: background-color 1.5s ease;
-    font-family: 'Arial', sans-serif;
-    overflow: hidden;
+    background-color: var(--dark-bg);
+    font-family: 'Orbitron', sans-serif;
+    color: var(--text-color);
+    transition: background-color 2s ease-in-out;
 }
 
-.wrapper {
+/* Fundo com estrelas/partículas e desfoque */
+.background-stars {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(10, 10, 30, 0) 0%, var(--dark-bg) 100%),
+                url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgODAgODAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXR0ZXJuIGlkPSJzdGFycyIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIj4KPGNpcmNsZSBmaWxsPSJ3aGl0ZSIgY3g9IjEwIiBjeT0iMTAiIHI9IjAuNSIvPgo8Y2lyY2xlIGZpbGw9ImxpZ2h0Z3JleSIgY3g9IjYwIiBjeT0iMzAiIHI9IjAuMyIvPgo8Y2lyY2xlIGZpbGw9InNpbHZlciIgY3g9IjQwIiBjeT0iNzAiIHI9IjAuNyIvPgo8Y2lyY2xlIGZpbGw9IndoaXRlIiBjeD0iNzUiIGN5PSI1MCIgcj0iMC40Ii8+CjwvY2lyY2xlPgo8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI3N0YXJzKSIvPgo8L3N2Zz4='); /* SVG de estrelas */
+    background-size: 80px 80px, cover;
+    filter: blur(2px); /* Desfoque inicial */
+    animation: panBackground 60s linear infinite;
+}
+
+@keyframes panBackground {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+}
+
+.vignette {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 0 0 150px rgba(0,0,0,0.8), inset 0 0 80px rgba(0,0,0,0.5);
+    z-index: 1;
+}
+
+/* Container principal para centralizar e empilhar */
+.main-container {
+    position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    z-index: 2;
+    transform: translateY(0); /* Para futuras animações */
+    transition: transform 1s ease-out;
 }
 
-.heart {
-    background-color: white;
-    height: 100px;
-    width: 100px;
+/* Brilho ao redor do coração principal */
+.heart-glow {
+    position: absolute;
+    width: 180px; /* Maior que o coração */
+    height: 180px;
+    background: radial-gradient(circle, var(--glow-color) 0%, rgba(255,51,163,0) 70%);
+    border-radius: 50%;
+    filter: blur(30px);
+    opacity: 0.6;
+    animation: pulseGlow 3s infinite alternate;
+    z-index: -1; /* Fica atrás do coração */
+}
+
+@keyframes pulseGlow {
+    0% { transform: scale(0.9); opacity: 0.6; }
+    100% { transform: scale(1.1); opacity: 0.9; }
+}
+
+/* Coração principal */
+.heart-icon {
     position: relative;
+    width: 100px;
+    height: 100px;
+    background-color: transparent; /* Transparente, a borda faz o desenho */
     transform: rotate(-45deg);
     cursor: pointer;
-    transition: all 0.5s ease;
-    display: flex;
+    transition: transform 0.4s ease-out, box-shadow 0.4s ease-out, background-color 0.4s ease-out;
+    box-shadow: 0 0 15px rgba(255,255,255,0.7); /* Contorno inicial branco */
+    display: flex; /* Para centralizar o conteúdo interno */
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 20px rgba(255,255,255,0.2);
-}
-
-.heart::before, .heart::after {
-    content: "";
-    background-color: white;
-    border-radius: 50%;
-    height: 100px;
-    width: 100px;
-    position: absolute;
-    transition: background-color 0.5s ease;
-}
-
-.heart::before { top: -50px; left: 0; }
-.heart::after { left: 50px; top: 0; }
-
-/* Efeito Hover */
-.heart:hover {
-    transform: rotate(-45deg) scale(1.1);
-}
-
-/* Quando clicado */
-.heart.active {
-    transform: rotate(-45deg) scale(2.5);
-    cursor: default;
-}
-
-.hidden {
-    opacity: 0;
-    transition: opacity 1s ease;
-    transform: rotate(45deg); /* Desvira o texto */
-    text-align: center;
     z-index: 10;
-    width: 100%;
 }
 
-#timer {
-    font-size: 8px; /* Pequeno para caber no coração */
-    font-weight: bold;
-    color: #ff1493;
-    margin: 0;
+.heart-icon::before, .heart-icon::after {
+    content: '';
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: transparent;
+    box-shadow: 0 0 15px rgba(255,255,255,0.7); /* Contorno inicial branco */
+    transition: box-shadow 0.4s ease-out, background-color 0.4s ease-out;
 }
 
-.hidden-text {
+.heart-icon::before { top: -50px; left: 0; }
+.heart-icon::after { left: 50px; top: 0; }
+
+/* Efeito de hover */
+.heart-icon:hover {
+    transform: rotate(-45deg) scale(1.1);
+    box-shadow: 0 0 25px var(--glow-color);
+}
+.heart-icon:hover::before, .heart-icon:hover::after {
+    box-shadow: 0 0 25px var(--glow-color);
+}
+
+/* Estado ativo (clicado) do coração principal */
+.heart-icon.active {
+    transform: rotate(-45deg) scale(1.8); /* Aumenta mais */
+    cursor: default;
+    background-color: var(--pink-accent); /* Preenche de rosa */
+    box-shadow: 0 0 30px var(--pink-accent), 0 0 60px var(--pink-accent); /* Brilho intenso */
+}
+.heart-icon.active::before, .heart-icon.active::after {
+    background-color: var(--pink-accent); /* Preenche de rosa */
+    box-shadow: 0 0 30px var(--pink-accent), 0 0 60px var(--pink-accent);
+}
+
+/* Conteúdo interno do coração */
+.heart-content {
+    position: relative;
+    transform: rotate(45deg); /* Desvira o conteúdo */
+    text-align: center;
+    color: var(--text-color);
     opacity: 0;
-    margin-top: 120px;
-    color: white;
-    font-size: 2.5rem;
-    transition: opacity 1s ease;
+    transition: opacity 1s ease 0.5s; /* Delay para aparecer depois do redimensionamento */
+    font-size: 0.8em;
+    padding: 10px;
 }
 
-/* Mudança de fundo */
-.bg-pink {
-    background-color: #ffc0cb !important;
+.heart-icon.active .heart-content {
+    opacity: 1;
 }
 
-.show {
-    opacity: 1 !important;
+.timer-display {
+    font-size: 0.7em; /* Ajusta para caber */
+    font-weight: bold;
+    color: var(--text-color);
+    text-shadow: 0 0 5px var(--glow-color);
+}
+
+/* Mensagem "Eu te amo" */
+.love-message {
+    margin-top: 100px; /* Espaço abaixo do coração */
+    font-size: 2em;
+    font-weight: bold;
+    color: var(--text-color);
+    text-shadow: 0 0 15px var(--pink-light), 0 0 30px rgba(255, 105, 180, 0.5);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1.5s ease 1s, transform 1.5s ease 1s; /* Atraso para aparecer depois do coração */
+    z-index: 2;
+}
+.love-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Fundo rosa e desfoque no clique */
+body.pink-mode {
+    background-color: var(--pink-light) !important;
+}
+.background-stars.blurred {
+    filter: blur(10px) brightness(1.2); /* Desfoque mais intenso e um pouco mais claro */
+    transition: filter 2s ease-in-out;
+}
+
+/* Corações pequenos que surgem */
+.small-hearts-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none; /* Não interfere com cliques */
+    overflow: hidden;
+    z-index: 15; /* Acima de tudo */
+}
+
+.small-heart {
+    position: absolute;
+    background-color: white;
+    width: 10px;
+    height: 10px;
+    transform: rotate(-45deg) scale(0); /* Começa invisível e pequeno */
+    opacity: 0;
+    animation: floatHeart 3s forwards ease-out; /* Animação de flutuar e sumir */
+    pointer-events: none;
+}
+
+.small-heart::before, .small-heart::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: white;
+}
+.small-heart::before { top: -5px; left: 0; }
+.small-heart::after { left: 5px; top: 0; }
+
+/* Animação para os corações pequenos */
+@keyframes floatHeart {
+    0% {
+        transform: rotate(-45deg) scale(0);
+        opacity: 0;
+        filter: hue-rotate(0deg);
+    }
+    20% {
+        transform: rotate(-45deg) scale(1);
+        opacity: 1;
+        filter: hue-rotate(360deg); /* Cores vibrantes */
+    }
+    100% {
+        transform: rotate(-45deg) scale(0.5) translateY(-200px) translateX(var(--random-x));
+        opacity: 0;
+    }
 }
