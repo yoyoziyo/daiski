@@ -1,63 +1,65 @@
-const mainHeart = document.getElementById('mainHeart');
+const heartContainer = document.getElementById('heartContainer');
 const loveMessage = document.getElementById('loveMessage');
 const timerDisplay = document.getElementById('timer');
-const backgroundStars = document.getElementById('backgroundStars');
-const container = document.getElementById('smallHeartsContainer');
+const explosionContainer = document.getElementById('explosionContainer');
 
-let isClicked = false;
-const startDate = new Date('2025-02-25T00:00:00');
+let hasBeenClicked = false;
+const targetDate = new Date('2025-02-25T00:00:00');
 
-mainHeart.addEventListener('click', () => {
-    if (!isClicked) {
-        isClicked = true;
+heartContainer.addEventListener('click', () => {
+    if (!hasBeenClicked) {
+        hasBeenClicked = true;
 
-        // Efeitos visuais principais
-        mainHeart.classList.add('active');
-        document.body.classList.add('pink-mode');
-        backgroundStars.classList.add('blurred');
+        // Ativa efeitos visuais
+        document.body.classList.add('active-bg');
+        heartContainer.classList.add('active');
         loveMessage.classList.add('show');
 
-        startTimer();
-        createExplosion();
+        startLiveTimer();
+        launchExplosion();
     }
 });
 
-function startTimer() {
+function startLiveTimer() {
     const update = () => {
         const now = new Date();
-        const diff = now - startDate;
+        const diff = now - targetDate;
 
         const d = Math.floor(diff / (1000 * 60 * 60 * 24));
         const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
         const m = Math.floor((diff / (1000 * 60)) % 60);
         const s = Math.floor((diff / 1000) % 60);
 
-        timerDisplay.innerHTML = `${d}d ${h}h ${m}m ${s}s`;
+        timerDisplay.innerHTML = `${d}D ${h}H ${m}M ${s}S`;
     };
     update();
     setInterval(update, 1000);
 }
 
-function createExplosion() {
-    for (let i = 0; i < 40; i++) {
+function launchExplosion() {
+    const particles = 50;
+    for (let i = 0; i < particles; i++) {
         setTimeout(() => {
-            const heart = document.createElement('div');
-            heart.className = 'small-heart';
+            const p = document.createElement('div');
+            p.className = 'particle-heart';
             
-            // Centraliza o nascimento no meio da tela
-            heart.style.left = '50%';
-            heart.style.top = '50%';
+            // Posição inicial: Centro exato
+            p.style.left = '50%';
+            p.style.top = '50%';
             
-            // Define direções aleatórias para a explosão
-            const tx = (Math.random() - 0.5) * 800 + 'px';
-            const ty = (Math.random() - 0.5) * 800 + 'px';
-            heart.style.setProperty('--tx', tx);
-            heart.style.setProperty('--ty', ty);
+            // Cálculo de trajetória circular aleatória
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 250 + Math.random() * 350;
+            const tx = Math.cos(angle) * distance + 'px';
+            const ty = Math.sin(angle) * distance + 'px';
             
-            container.appendChild(heart);
+            p.style.setProperty('--tx', tx);
+            p.style.setProperty('--ty', ty);
             
-            // Limpa o elemento após a animação
-            setTimeout(() => heart.remove(), 3000);
-        }, i * 40);
+            explosionContainer.appendChild(p);
+            
+            // Remove para não pesar o site
+            setTimeout(() => p.remove(), 3000);
+        }, i * 30);
     }
 }
