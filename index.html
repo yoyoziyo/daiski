@@ -3,28 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Sempre</title>
+    <title>Infinity Love</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="background-stars" id="backgroundStars"></div>
-    <div class="vignette"></div>
+    <div class="bg-overlay" id="bgOverlay"></div>
+    <div class="stars" id="stars"></div>
 
-    <div class="main-container">
-        <div id="heartGlow" class="heart-glow"></div>
-        
-        <div id="heartWrapper" class="heart-wrapper">
-            <img src="https://raw.githubusercontent.com/yoyoziyo/daiski/refs/heads/main/cora%C3%A7%C3%A3obranco.png" 
-                 id="mainHeart" class="heart-img" alt="Coração">
-            
-            <div id="heartContent" class="heart-content">
-                <p id="timer" class="timer-display"></p>
+    <div class="container">
+        <div class="heart-aura" id="aura"></div>
+
+        <div class="heart-main" id="heart">
+            <div class="heart-inner-content" id="content">
+                <div id="timer"></div>
             </div>
         </div>
 
-        <p id="loveMessage" class="love-message">Eu te amo</p>
+        <h1 class="love-text" id="loveText">Eu te amo</h1>
     </div>
+
+    <div id="particles-container"></div>
 
     <script src="script.js"></script>
 </body>
