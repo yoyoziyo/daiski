@@ -1,1 +1,72 @@
 
+body, html {
+    margin: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1a1a1a; /* Fundo Escuro */
+    transition: background-color 1s ease;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+}
+
+.heart {
+    background-color: white;
+    display: inline-block;
+    height: 50px;
+    position: relative;
+    top: 0;
+    transform: rotate(-45deg);
+    width: 50px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.heart:before, .heart:after {
+    content: "";
+    background-color: white;
+    border-radius: 50%;
+    height: 50px;
+    position: absolute;
+    width: 50px;
+}
+
+.heart:before { top: -25px; left: 0; }
+.heart:after { left: 25px; top: 0; }
+
+/* Efeito de Hover */
+.heart:hover {
+    transform: rotate(-45deg) scale(1.2);
+}
+
+/* Estado após o clique */
+.clicked-heart {
+    transform: rotate(-45deg) scale(3) !important;
+    cursor: default;
+}
+
+.pink-bg {
+    background-color: #ffb6c1 !important;
+}
+
+.hidden {
+    display: none;
+    text-align: center;
+    position: absolute;
+    z-index: 10;
+}
+
+#timer {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #d63384;
+    transform: rotate(45deg); /* Para desvirar o texto dentro do coração */
+}
+
+.love-text {
+    margin-top: 50px;
+    color: white;
+    font-size: 2rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
