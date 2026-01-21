@@ -1,7 +1,7 @@
 :root {
-    --dark-bg: #050510;
-    --pink-accent: #ff007f;
-    --glow-color: #ff33a3;
+    --bg-dark: #02020a;
+    --pink-neon: #ff007f;
+    --pink-glow: #ff33a3;
     --white: #ffffff;
 }
 
@@ -9,32 +9,36 @@ body, html {
     margin: 0; padding: 0;
     width: 100%; height: 100%;
     overflow: hidden;
+    background-color: var(--bg-dark);
+    font-family: 'Orbitron', sans-serif;
+    /* Centralização Máxima */
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--dark-bg);
-    font-family: 'Orbitron', sans-serif;
-    transition: background-color 2s ease-in-out;
 }
 
-/* Fundo Estelar */
+/* Fundo com movimento e desfoque */
 .background-stars {
-    position: absolute;
+    position: fixed;
+    top: 0; left: 0;
     width: 100%; height: 100%;
-    background: radial-gradient(circle at center, rgba(10, 10, 30, 0) 0%, var(--dark-bg) 100%),
+    background: radial-gradient(circle at center, rgba(15, 15, 35, 0) 0%, var(--bg-dark) 100%),
                 url('https://www.transparenttextures.com/patterns/stardust.png');
-    background-size: cover;
-    filter: blur(2px);
-    animation: panBackground 100s linear infinite;
     z-index: 0;
+    transition: filter 2s ease, opacity 2s ease;
 }
 
-@keyframes panBackground {
-    from { background-position: 0% 0%; }
-    to { background-position: 100% 100%; }
+.vignette {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    box-shadow: inset 0 0 200px rgba(0,0,0,0.9);
+    z-index: 1;
+    pointer-events: none;
 }
 
-.main-container {
+/* Container Centralizador */
+.main-wrapper {
     position: relative;
     z-index: 10;
     display: flex;
@@ -43,106 +47,105 @@ body, html {
     justify-content: center;
 }
 
-/* Brilho pulsante atrás */
+/* Aura de Brilho atrás da Imagem */
 .heart-glow {
     position: absolute;
-    width: 250px; height: 250px;
-    background: radial-gradient(circle, var(--glow-color) 0%, transparent 70%);
-    filter: blur(40px);
-    opacity: 0.3;
-    animation: pulseGlow 3s infinite alternate;
-    z-index: -1;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, var(--pink-glow) 0%, transparent 70%);
+    filter: blur(50px);
+    opacity: 0.2;
+    transition: all 1s ease;
+    pointer-events: none;
 }
 
-@keyframes pulseGlow {
-    from { transform: scale(0.8); opacity: 0.3; }
-    to { transform: scale(1.2); opacity: 0.6; }
+/* Efeito Hover na Aura */
+.heart-container:hover ~ .heart-glow {
+    opacity: 0.6;
+    transform: scale(1.3);
 }
 
-/* O Coração Sólido */
-.heart-icon {
+/* Container da Imagem e Timer */
+.heart-container {
     position: relative;
-    width: 100px; height: 100px;
-    background-color: var(--white); /* BRANCO SÓLIDO para esconder emendas */
-    transform: rotate(-45deg);
-    cursor: pointer;
-    box-shadow: 0 0 20px rgba(255,255,255,0.5);
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    animation: heartbeat 1.5s infinite ease-in-out;
+    cursor: pointer;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: heartbeat 2s infinite ease-in-out;
 }
 
-.heart-icon::before, .heart-icon::after {
-    content: '';
-    position: absolute;
-    width: 100px; height: 100px;
-    border-radius: 50%;
-    background-color: var(--white); /* BRANCO SÓLIDO */
+.heart-img {
+    width: 200px; /* Tamanho elegante */
+    height: auto;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
+    transition: all 1.5s ease;
 }
 
-.heart-icon::before { top: -50px; left: 0; }
-.heart-icon::after { left: 50px; top: 0; }
-
+/* Batida inicial */
 @keyframes heartbeat {
-    0%, 100% { transform: rotate(-45deg) scale(1); }
-    50% { transform: rotate(-45deg) scale(1.1); }
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
 }
 
-/* Estado Ativo (Clicado) */
-.heart-icon.active {
-    background-color: var(--pink-accent);
-    transform: rotate(-45deg) scale(2.5);
-    animation: pulseSlow 4s infinite ease-in-out 1s; /* Batida lenta após clicar */
-    box-shadow: 0 0 40px var(--pink-accent), 0 0 80px var(--glow-color);
+/* ESTADO ATIVO (CLICADO) */
+.heart-container.active {
+    transform: scale(2.2);
+    animation: slowPulse 4s infinite ease-in-out 1s;
 }
 
-.heart-icon.active::before, .heart-icon.active::after {
-    background-color: var(--pink-accent);
+/* Transforma o PNG Branco em Rosa Profissional */
+.heart-container.active .heart-img {
+    filter: sepia(1) saturate(15) hue-rotate(290deg) drop-shadow(0 0 20px var(--pink-neon));
 }
 
-@keyframes pulseSlow {
-    0%, 100% { transform: rotate(-45deg) scale(2.5); }
-    50% { transform: rotate(-45deg) scale(2.7); }
+@keyframes slowPulse {
+    0%, 100% { transform: scale(2.2); }
+    50% { transform: scale(2.35); }
 }
 
-/* Conteúdo do Timer */
+/* Timer Centralizado sobre a Imagem */
 .heart-content {
-    transform: rotate(45deg); /* Desvira o texto */
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
+    width: 100%;
     opacity: 0;
-    z-index: 20;
-    transition: opacity 1s ease 0.8s;
+    transition: opacity 1s ease 1s;
+    pointer-events: none;
 }
 
-.heart-icon.active .heart-content { opacity: 1; }
+.heart-container.active .heart-content { opacity: 1; }
 
 .timer-display {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: bold;
     color: white;
-    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    text-shadow: 0 0 8px rgba(0,0,0,0.9);
+    margin: 0;
+    letter-spacing: 1px;
 }
 
+/* Mensagem Inferior */
 .love-message {
-    margin-top: 100px; /* Distância do coração */
-    font-size: 2.2rem;
+    margin-top: 60px;
+    font-size: 2rem;
     color: white;
-    text-shadow: 0 0 15px var(--pink-accent);
+    text-shadow: 0 0 20px var(--pink-neon);
     opacity: 0;
-    transform: translateY(30px);
-    transition: all 1.5s ease 1.2s;
+    transform: translateY(20px);
+    transition: all 1.5s ease 1.5s;
 }
 
 .love-message.show { opacity: 1; transform: translateY(0); }
 
-/* Mudanças de Fundo no Clique */
-body.pink-mode { background-color: #1a0510; }
-.background-stars.blurred { filter: blur(10px) brightness(0.6); }
+/* Mudança de Ambiente */
+body.active-bg { background-color: #120208; }
+body.active-bg .background-stars { filter: blur(8px) brightness(0.4); }
 
-/* Explosão de Corações */
-.small-hearts-container {
+/* Partículas da Explosão */
+.explosion-container {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
@@ -150,25 +153,15 @@ body.pink-mode { background-color: #1a0510; }
     z-index: 100;
 }
 
-.small-heart {
+.particle-heart {
     position: absolute;
-    background-color: var(--pink-accent);
-    width: 15px; height: 15px;
-    transform: rotate(-45deg);
-    animation: floatParticle 3s forwards ease-out;
+    background-color: var(--pink-neon);
+    width: 12px; height: 12px;
+    clip-path: path('M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z');
+    animation: fly 3s forwards ease-out;
 }
 
-.small-heart::before, .small-heart::after {
-    content: '';
-    position: absolute;
-    width: 15px; height: 15px;
-    border-radius: 50%;
-    background-color: var(--pink-accent);
-}
-.small-heart::before { top: -7.5px; left: 0; }
-.small-heart::after { left: 7.5px; top: 0; }
-
-@keyframes floatParticle {
-    0% { transform: rotate(-45deg) scale(0); opacity: 1; }
-    100% { transform: rotate(-45deg) scale(1.5) translate(var(--tx), var(--ty)); opacity: 0; }
+@keyframes fly {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(1.5); opacity: 0; }
 }
