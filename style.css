@@ -1,229 +1,174 @@
 :root {
-    --dark-bg: #0a0a1a;
+    --dark-bg: #050510;
     --pink-accent: #ff007f;
-    --pink-light: #ff69b4;
     --glow-color: #ff33a3;
-    --text-color: #e0e0e0;
+    --white: #ffffff;
 }
 
 body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden; /* Garante que nada saia das bordas */
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: var(--dark-bg);
     font-family: 'Orbitron', sans-serif;
-    color: var(--text-color);
     transition: background-color 2s ease-in-out;
 }
 
-/* Fundo com estrelas/partículas e desfoque */
+/* Fundo Estelar */
 .background-stars {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     background: radial-gradient(circle at center, rgba(10, 10, 30, 0) 0%, var(--dark-bg) 100%),
-                url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgODAgODAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXR0ZXJuIGlkPSJzdGFycyIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIj4KPGNpcmNsZSBmaWxsPSJ3aGl0ZSIgY3g9IjEwIiBjeT0iMTAiIHI9IjAuNSIvPgo8Y2lyY2xlIGZpbGw9ImxpZ2h0Z3JleSIgY3g9IjYwIiBjeT0iMzAiIHI9IjAuMyIvPgo8Y2lyY2xlIGZpbGw9InNpbHZlciIgY3g9IjQwIiBjeT0iNzAiIHI9IjAuNyIvPgo8Y2lyY2xlIGZpbGw9IndoaXRlIiBjeD0iNzUiIGN5PSI1MCIgcj0iMC40Ii8+CjwvY2lyY2xlPgo8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI3N0YXJzKSIvPgo8L3N2Zz4='); /* SVG de estrelas */
-    background-size: 80px 80px, cover;
-    filter: blur(2px); /* Desfoque inicial */
-    animation: panBackground 60s linear infinite;
+                url('https://www.transparenttextures.com/patterns/stardust.png');
+    background-size: cover;
+    filter: blur(2px);
+    animation: panBackground 100s linear infinite;
+    z-index: 0;
 }
 
 @keyframes panBackground {
-    0% { background-position: 0% 0%; }
-    100% { background-position: 100% 100%; }
+    from { background-position: 0% 0%; }
+    to { background-position: 100% 100%; }
 }
 
-.vignette {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    box-shadow: inset 0 0 150px rgba(0,0,0,0.8), inset 0 0 80px rgba(0,0,0,0.5);
-    z-index: 1;
-}
-
-/* Container principal para centralizar e empilhar */
 .main-container {
     position: relative;
+    z-index: 10;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    z-index: 2;
-    transform: translateY(0); /* Para futuras animações */
-    transition: transform 1s ease-out;
+    justify-content: center;
 }
 
-/* Brilho ao redor do coração principal */
+/* Brilho pulsante atrás */
 .heart-glow {
     position: absolute;
-    width: 180px; /* Maior que o coração */
-    height: 180px;
-    background: radial-gradient(circle, var(--glow-color) 0%, rgba(255,51,163,0) 70%);
-    border-radius: 50%;
-    filter: blur(30px);
-    opacity: 0.6;
+    width: 250px; height: 250px;
+    background: radial-gradient(circle, var(--glow-color) 0%, transparent 70%);
+    filter: blur(40px);
+    opacity: 0.3;
     animation: pulseGlow 3s infinite alternate;
-    z-index: -1; /* Fica atrás do coração */
+    z-index: -1;
 }
 
 @keyframes pulseGlow {
-    0% { transform: scale(0.9); opacity: 0.6; }
-    100% { transform: scale(1.1); opacity: 0.9; }
+    from { transform: scale(0.8); opacity: 0.3; }
+    to { transform: scale(1.2); opacity: 0.6; }
 }
 
-/* Coração principal */
+/* O Coração Sólido */
 .heart-icon {
     position: relative;
-    width: 100px;
-    height: 100px;
-    background-color: transparent; /* Transparente, a borda faz o desenho */
+    width: 100px; height: 100px;
+    background-color: var(--white); /* BRANCO SÓLIDO para esconder emendas */
     transform: rotate(-45deg);
     cursor: pointer;
-    transition: transform 0.4s ease-out, box-shadow 0.4s ease-out, background-color 0.4s ease-out;
-    box-shadow: 0 0 15px rgba(255,255,255,0.7); /* Contorno inicial branco */
-    display: flex; /* Para centralizar o conteúdo interno */
+    box-shadow: 0 0 20px rgba(255,255,255,0.5);
+    display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: heartbeat 1.5s infinite ease-in-out;
 }
 
 .heart-icon::before, .heart-icon::after {
     content: '';
     position: absolute;
-    width: 100px;
-    height: 100px;
+    width: 100px; height: 100px;
     border-radius: 50%;
-    background-color: transparent;
-    box-shadow: 0 0 15px rgba(255,255,255,0.7); /* Contorno inicial branco */
-    transition: box-shadow 0.4s ease-out, background-color 0.4s ease-out;
+    background-color: var(--white); /* BRANCO SÓLIDO */
 }
 
 .heart-icon::before { top: -50px; left: 0; }
 .heart-icon::after { left: 50px; top: 0; }
 
-/* Efeito de hover */
-.heart-icon:hover {
-    transform: rotate(-45deg) scale(1.1);
-    box-shadow: 0 0 25px var(--glow-color);
-}
-.heart-icon:hover::before, .heart-icon:hover::after {
-    box-shadow: 0 0 25px var(--glow-color);
+@keyframes heartbeat {
+    0%, 100% { transform: rotate(-45deg) scale(1); }
+    50% { transform: rotate(-45deg) scale(1.1); }
 }
 
-/* Estado ativo (clicado) do coração principal */
+/* Estado Ativo (Clicado) */
 .heart-icon.active {
-    transform: rotate(-45deg) scale(1.8); /* Aumenta mais */
-    cursor: default;
-    background-color: var(--pink-accent); /* Preenche de rosa */
-    box-shadow: 0 0 30px var(--pink-accent), 0 0 60px var(--pink-accent); /* Brilho intenso */
+    background-color: var(--pink-accent);
+    transform: rotate(-45deg) scale(2.5);
+    animation: pulseSlow 4s infinite ease-in-out 1s; /* Batida lenta após clicar */
+    box-shadow: 0 0 40px var(--pink-accent), 0 0 80px var(--glow-color);
 }
+
 .heart-icon.active::before, .heart-icon.active::after {
-    background-color: var(--pink-accent); /* Preenche de rosa */
-    box-shadow: 0 0 30px var(--pink-accent), 0 0 60px var(--pink-accent);
+    background-color: var(--pink-accent);
 }
 
-/* Conteúdo interno do coração */
+@keyframes pulseSlow {
+    0%, 100% { transform: rotate(-45deg) scale(2.5); }
+    50% { transform: rotate(-45deg) scale(2.7); }
+}
+
+/* Conteúdo do Timer */
 .heart-content {
-    position: relative;
-    transform: rotate(45deg); /* Desvira o conteúdo */
+    transform: rotate(45deg); /* Desvira o texto */
     text-align: center;
-    color: var(--text-color);
     opacity: 0;
-    transition: opacity 1s ease 0.5s; /* Delay para aparecer depois do redimensionamento */
-    font-size: 0.8em;
-    padding: 10px;
+    z-index: 20;
+    transition: opacity 1s ease 0.8s;
 }
 
-.heart-icon.active .heart-content {
-    opacity: 1;
-}
+.heart-icon.active .heart-content { opacity: 1; }
 
 .timer-display {
-    font-size: 0.7em; /* Ajusta para caber */
+    font-size: 10px;
     font-weight: bold;
-    color: var(--text-color);
-    text-shadow: 0 0 5px var(--glow-color);
+    color: white;
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
 
-/* Mensagem "Eu te amo" */
 .love-message {
-    margin-top: 100px; /* Espaço abaixo do coração */
-    font-size: 2em;
-    font-weight: bold;
-    color: var(--text-color);
-    text-shadow: 0 0 15px var(--pink-light), 0 0 30px rgba(255, 105, 180, 0.5);
+    margin-top: 100px; /* Distância do coração */
+    font-size: 2.2rem;
+    color: white;
+    text-shadow: 0 0 15px var(--pink-accent);
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 1.5s ease 1s, transform 1.5s ease 1s; /* Atraso para aparecer depois do coração */
-    z-index: 2;
-}
-.love-message.show {
-    opacity: 1;
-    transform: translateY(0);
+    transform: translateY(30px);
+    transition: all 1.5s ease 1.2s;
 }
 
-/* Fundo rosa e desfoque no clique */
-body.pink-mode {
-    background-color: var(--pink-light) !important;
-}
-.background-stars.blurred {
-    filter: blur(10px) brightness(1.2); /* Desfoque mais intenso e um pouco mais claro */
-    transition: filter 2s ease-in-out;
-}
+.love-message.show { opacity: 1; transform: translateY(0); }
 
-/* Corações pequenos que surgem */
+/* Mudanças de Fundo no Clique */
+body.pink-mode { background-color: #1a0510; }
+.background-stars.blurred { filter: blur(10px) brightness(0.6); }
+
+/* Explosão de Corações */
 .small-hearts-container {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    pointer-events: none; /* Não interfere com cliques */
-    overflow: hidden;
-    z-index: 15; /* Acima de tudo */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 100;
 }
 
 .small-heart {
     position: absolute;
-    background-color: white;
-    width: 10px;
-    height: 10px;
-    transform: rotate(-45deg) scale(0); /* Começa invisível e pequeno */
-    opacity: 0;
-    animation: floatHeart 3s forwards ease-out; /* Animação de flutuar e sumir */
-    pointer-events: none;
+    background-color: var(--pink-accent);
+    width: 15px; height: 15px;
+    transform: rotate(-45deg);
+    animation: floatParticle 3s forwards ease-out;
 }
 
 .small-heart::before, .small-heart::after {
     content: '';
     position: absolute;
-    width: 10px;
-    height: 10px;
+    width: 15px; height: 15px;
     border-radius: 50%;
-    background-color: white;
+    background-color: var(--pink-accent);
 }
-.small-heart::before { top: -5px; left: 0; }
-.small-heart::after { left: 5px; top: 0; }
+.small-heart::before { top: -7.5px; left: 0; }
+.small-heart::after { left: 7.5px; top: 0; }
 
-/* Animação para os corações pequenos */
-@keyframes floatHeart {
-    0% {
-        transform: rotate(-45deg) scale(0);
-        opacity: 0;
-        filter: hue-rotate(0deg);
-    }
-    20% {
-        transform: rotate(-45deg) scale(1);
-        opacity: 1;
-        filter: hue-rotate(360deg); /* Cores vibrantes */
-    }
-    100% {
-        transform: rotate(-45deg) scale(0.5) translateY(-200px) translateX(var(--random-x));
-        opacity: 0;
-    }
+@keyframes floatParticle {
+    0% { transform: rotate(-45deg) scale(0); opacity: 1; }
+    100% { transform: rotate(-45deg) scale(1.5) translate(var(--tx), var(--ty)); opacity: 0; }
 }
