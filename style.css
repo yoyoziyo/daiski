@@ -3,131 +3,289 @@
     --pink-accent: #ff007f;
     --pink-light: #ff69b4;
     --glow-color: #ff33a3;
-    --text-color: #ffffff;
+    --text-color: #e0e0e0;
+    --heart-size: 100px;
 }
 
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent; /* Remove brilho de clique no celular */
 }
 
 body, html {
-    margin: 0;
-    padding: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
     background-color: var(--dark-bg);
     font-family: 'Orbitron', sans-serif;
+    color: var(--text-color);
     transition: background-color 2s ease-in-out;
+    position: fixed;
 }
 
-/* Centralização Perfeita */
+.background-stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(10, 10, 30, 0) 0%, var(--dark-bg) 100%),
+                url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgODAgODAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXR0ZXJuIGlkPSJzdGFycyIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIj4KPGNpcmNsZSBmaWxsPSJ3aGl0ZSIgY3g9IjEwIiBjeT0iMTAiIHI9IjAuNSIvPgo8Y2lyY2xlIGZpbGw9ImxpZ2h0Z3JleSIgY3g9IjYwIiBjeT0iMzAiIHI9IjAuMyIvPgo8Y2lyY2xlIGZpbGw9InNpbHZlciIgY3g9IjQwIiBjeT0iNzAiIHI9IjAuNyIvPgo8Y2lyY2xlIGZpbGw9IndoaXRlIiBjeD0iNzUiIGN5PSI1MCIgcj0iMC40Ii8+CjwvcGF0dGVybj4KPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNzdGFycykiLz4KPC9zdmc+');
+    background-size: 80px 80px, cover;
+    filter: blur(2px);
+    animation: panBackground 60s linear infinite;
+    z-index: 0;
+}
+
+@keyframes panBackground {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+}
+
+.vignette {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 0 0 150px rgba(0,0,0,0.8), inset 0 0 80px rgba(0,0,0,0.5);
+    z-index: 1;
+    pointer-events: none;
+}
+
 .main-container {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    z-index: 2;
     width: 100%;
-    z-index: 10;
+    max-width: 500px;
+    padding: 20px;
 }
 
-/* Coração Principal - Tamanho Adaptável */
+.heart-glow {
+    position: absolute;
+    width: calc(var(--heart-size) * 1.8);
+    height: calc(var(--heart-size) * 1.8);
+    background: radial-gradient(circle, var(--glow-color) 0%, rgba(255,51,163,0) 70%);
+    border-radius: 50%;
+    filter: blur(30px);
+    opacity: 0.6;
+    animation: pulseGlow 3s infinite alternate;
+    z-index: 8;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+@keyframes pulseGlow {
+    0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+    100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.9; }
+}
+
 .heart-icon {
     position: relative;
-    width: 80px;
-    height: 80px;
-    background-color: rgba(255, 255, 255, 0.1);
+    width: var(--heart-size);
+    height: var(--heart-size);
+    background-color: transparent;
     transform: rotate(-45deg);
     cursor: pointer;
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: transform 0.4s ease-out, box-shadow 0.4s ease-out, background-color 0.4s ease-out;
+    box-shadow: 0 0 15px rgba(255,255,255,0.7);
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 2px solid rgba(255, 255, 255, 0.5);
+    z-index: 10;
+    flex-shrink: 0;
 }
 
 .heart-icon::before, .heart-icon::after {
     content: '';
     position: absolute;
-    width: 80px;
-    height: 80px;
+    width: var(--heart-size);
+    height: var(--heart-size);
     border-radius: 50%;
-    background-color: inherit;
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    border-bottom: none;
-    border-right: none;
+    background-color: transparent;
+    box-shadow: 0 0 15px rgba(255,255,255,0.7);
+    transition: box-shadow 0.4s ease-out, background-color 0.4s ease-out;
+    z-index: 9;
 }
 
-.heart-icon::before { top: -42px; left: -2px; }
-.heart-icon::after { left: 40px; top: -2px; }
-
-/* Ajuste para Celular (Coração um pouco menor para caber texto) */
-@media (max-width: 600px) {
-    .heart-icon { width: 60px; height: 60px; }
-    .heart-icon::before, .heart-icon::after { width: 60px; height: 60px; }
-    .heart-icon::before { top: -32px; }
-    .heart-icon::after { left: 30px; }
-    .timer-display { font-size: 0.6em !important; }
+.heart-icon::before { 
+    top: calc(var(--heart-size) * -0.5); 
+    left: 0; 
 }
 
-/* Estado Ativo */
+.heart-icon::after { 
+    left: calc(var(--heart-size) * 0.5); 
+    top: 0; 
+}
+
+.heart-icon:hover {
+    transform: rotate(-45deg) scale(1.1);
+    box-shadow: 0 0 25px var(--glow-color);
+}
+
+.heart-icon:hover::before, .heart-icon:hover::after {
+    box-shadow: 0 0 25px var(--glow-color);
+}
+
 .heart-icon.active {
-    transform: rotate(-45deg) scale(2.5);
+    transform: rotate(-45deg) scale(1.8);
+    cursor: default;
     background-color: var(--pink-accent);
-    border-color: transparent;
-    box-shadow: 0 0 40px var(--pink-accent);
+    box-shadow: 0 0 30px var(--pink-accent), 0 0 60px var(--pink-accent);
 }
 
 .heart-icon.active::before, .heart-icon.active::after {
     background-color: var(--pink-accent);
-    border-color: transparent;
+    box-shadow: 0 0 30px var(--pink-accent), 0 0 60px var(--pink-accent);
 }
 
-/* Texto dentro do coração */
 .heart-content {
-    transform: rotate(45deg);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
     text-align: center;
+    color: var(--text-color);
     opacity: 0;
-    transition: opacity 0.8s ease 0.4s;
-    width: 140%; /* Garante que o texto use o espaço do coração expandido */
+    transition: opacity 1s ease 0.5s;
+    font-size: clamp(0.6em, 2vw, 0.8em);
+    padding: 10px;
+    white-space: nowrap;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.heart-content.show {
+    opacity: 1;
 }
 
 .timer-display {
-    font-size: 0.5em;
+    font-size: clamp(0.5em, 1.5vw, 0.7em);
     font-weight: bold;
-    color: white;
-    text-shadow: 0 0 5px rgba(0,0,0,0.5);
-    white-space: nowrap;
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.8), 0 0 15px var(--glow-color);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 5px 8px;
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
 }
 
 .love-message {
-    margin-top: 120px;
-    font-size: 1.5rem;
-    text-align: center;
+    margin-top: clamp(80px, 15vh, 150px);
+    font-size: clamp(1.5em, 5vw, 2.5em);
+    font-weight: bold;
+    color: var(--text-color);
+    text-shadow: 0 0 15px var(--pink-light), 0 0 30px rgba(255, 105, 180, 0.5);
     opacity: 0;
-    transition: all 1s ease;
-    text-transform: uppercase;
-    letter-spacing: 3px;
+    transform: translateY(20px);
+    transition: opacity 1.5s ease 1s, transform 1.5s ease 1s;
+    z-index: 2;
+    text-align: center;
 }
 
 .love-message.show {
     opacity: 1;
-    transform: translateY(-20px);
-}
-
-/* Estrelas de fundo */
-.background-stars {
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(circle at center, #16162d 0%, #000 100%);
-    opacity: 0.5;
+    transform: translateY(0);
 }
 
 body.pink-mode {
-    background-color: #2b0016 !important; /* Um rosa bem escuro para manter o contraste */
+    background-color: var(--pink-light) !important;
 }
+
+.background-stars.blurred {
+    filter: blur(10px) brightness(1.2);
+    transition: filter 2s ease-in-out;
+}
+
+.small-hearts-container {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 15;
+}
+
+.small-heart {
+    position: absolute;
+    background-color: white;
+    width: 10px;
+    height: 10px;
+    transform: rotate(-45deg) scale(0);
+    opacity: 0;
+    animation: floatHeart 3s forwards ease-out;
+    pointer-events: none;
+}
+
+.small-heart::before, .small-heart::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: white;
+}
+
+.small-heart::before { top: -5px; left: 0; }
+.small-heart::after { left: 5px; top: 0; }
+
+@keyframes floatHeart {
+    0% {
+        transform: rotate(-45deg) scale(0);
+        opacity: 0;
+        filter: hue-rotate(0deg);
+    }
+    20% {
+        transform: rotate(-45deg) scale(1);
+        opacity: 1;
+        filter: hue-rotate(360deg);
+    }
+    100% {
+        transform: rotate(-45deg) scale(0.5) translateY(-200px) translateX(var(--random-x));
+        opacity: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --heart-size: 80px;
+    }
+
+    .main-container {
+        max-width: 90%;
+    }
+
+    .heart-icon.active {
+        transform: rotate(-45deg) scale(1.5);
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --heart-size: 70px;
+    }
+
+    .heart-icon.active {
+        transform: rotate(-45deg) scale(1.3);
+    }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+    .love-message {
+        margin-top: 60px;
+        font-size: clamp(1.2em, 4vw, 1.8em);
+    }
+}
+-->
