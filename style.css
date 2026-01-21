@@ -1,72 +1,91 @@
-
 body, html {
     margin: 0;
+    padding: 0;
+    width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #1a1a1a; /* Fundo Escuro */
-    transition: background-color 1s ease;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1a1a1a;
+    transition: background-color 1.5s ease;
+    font-family: 'Arial', sans-serif;
     overflow: hidden;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .heart {
     background-color: white;
-    display: inline-block;
-    height: 50px;
+    height: 100px;
+    width: 100px;
     position: relative;
-    top: 0;
     transform: rotate(-45deg);
-    width: 50px;
     cursor: pointer;
-    transition: transform 0.3s ease, background-color 0.3s ease;
+    transition: all 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 20px rgba(255,255,255,0.2);
 }
 
-.heart:before, .heart:after {
+.heart::before, .heart::after {
     content: "";
     background-color: white;
     border-radius: 50%;
-    height: 50px;
+    height: 100px;
+    width: 100px;
     position: absolute;
-    width: 50px;
+    transition: background-color 0.5s ease;
 }
 
-.heart:before { top: -25px; left: 0; }
-.heart:after { left: 25px; top: 0; }
+.heart::before { top: -50px; left: 0; }
+.heart::after { left: 50px; top: 0; }
 
-/* Efeito de Hover */
+/* Efeito Hover */
 .heart:hover {
-    transform: rotate(-45deg) scale(1.2);
+    transform: rotate(-45deg) scale(1.1);
 }
 
-/* Estado após o clique */
-.clicked-heart {
-    transform: rotate(-45deg) scale(3) !important;
+/* Quando clicado */
+.heart.active {
+    transform: rotate(-45deg) scale(2.5);
     cursor: default;
 }
 
-.pink-bg {
-    background-color: #ffb6c1 !important;
-}
-
 .hidden {
-    display: none;
+    opacity: 0;
+    transition: opacity 1s ease;
+    transform: rotate(45deg); /* Desvira o texto */
     text-align: center;
-    position: absolute;
     z-index: 10;
+    width: 100%;
 }
 
 #timer {
-    font-size: 0.8rem;
+    font-size: 8px; /* Pequeno para caber no coração */
     font-weight: bold;
-    color: #d63384;
-    transform: rotate(45deg); /* Para desvirar o texto dentro do coração */
+    color: #ff1493;
+    margin: 0;
 }
 
-.love-text {
-    margin-top: 50px;
+.hidden-text {
+    opacity: 0;
+    margin-top: 120px;
     color: white;
-    font-size: 2rem;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    font-size: 2.5rem;
+    transition: opacity 1s ease;
+}
+
+/* Mudança de fundo */
+.bg-pink {
+    background-color: #ffc0cb !important;
+}
+
+.show {
+    opacity: 1 !important;
 }
