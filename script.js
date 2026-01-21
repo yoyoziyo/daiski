@@ -1,29 +1,31 @@
-const heartContainer = document.getElementById('heartContainer');
+const mainHeart = document.getElementById('mainHeart');
 const loveMessage = document.getElementById('loveMessage');
 const timerDisplay = document.getElementById('timer');
-const explosionContainer = document.getElementById('explosionContainer');
+const stars = document.getElementById('backgroundStars');
+const container = document.getElementById('smallHeartsContainer');
 
-let hasBeenClicked = false;
-const targetDate = new Date('2025-02-25T00:00:00');
+let hasClicked = false;
+const startDate = new Date('2025-02-25T00:00:00');
 
-heartContainer.addEventListener('click', () => {
-    if (!hasBeenClicked) {
-        hasBeenClicked = true;
+mainHeart.addEventListener('click', () => {
+    if (!hasClicked) {
+        hasClicked = true;
 
-        // Ativa efeitos visuais
-        document.body.classList.add('active-bg');
-        heartContainer.classList.add('active');
+        // Ativação das animações
+        mainHeart.classList.add('active');
+        document.body.classList.add('pink-mode');
+        stars.classList.add('blurred');
         loveMessage.classList.add('show');
 
-        startLiveTimer();
-        launchExplosion();
+        startTimer();
+        createExplosion();
     }
 });
 
-function startLiveTimer() {
+function startTimer() {
     const update = () => {
         const now = new Date();
-        const diff = now - targetDate;
+        const diff = now - startDate;
 
         const d = Math.floor(diff / (1000 * 60 * 60 * 24));
         const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
@@ -36,30 +38,25 @@ function startLiveTimer() {
     setInterval(update, 1000);
 }
 
-function launchExplosion() {
-    const particles = 50;
-    for (let i = 0; i < particles; i++) {
+function createExplosion() {
+    for (let i = 0; i < 50; i++) {
         setTimeout(() => {
-            const p = document.createElement('div');
-            p.className = 'particle-heart';
+            const h = document.createElement('div');
+            h.className = 'small-heart';
+            h.style.left = '50%';
+            h.style.top = '50%';
             
-            // Posição inicial: Centro exato
-            p.style.left = '50%';
-            p.style.top = '50%';
-            
-            // Cálculo de trajetória circular aleatória
+            // Explosão em 360 graus
             const angle = Math.random() * Math.PI * 2;
-            const distance = 250 + Math.random() * 350;
-            const tx = Math.cos(angle) * distance + 'px';
-            const ty = Math.sin(angle) * distance + 'px';
+            const dist = 300 + Math.random() * 400;
+            const tx = Math.cos(angle) * dist + 'px';
+            const ty = Math.sin(angle) * dist + 'px';
             
-            p.style.setProperty('--tx', tx);
-            p.style.setProperty('--ty', ty);
+            h.style.setProperty('--tx', tx);
+            h.style.setProperty('--ty', ty);
             
-            explosionContainer.appendChild(p);
-            
-            // Remove para não pesar o site
-            setTimeout(() => p.remove(), 3000);
+            container.appendChild(h);
+            setTimeout(() => h.remove(), 3000);
         }, i * 30);
     }
 }
