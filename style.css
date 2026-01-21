@@ -1,7 +1,6 @@
 :root {
-    --dark-bg: #0a0a1a;
-    --pink-accent: #ff007f;
-    --glow-color: #ff33a3;
+    --dark-bg: #05050a;
+    --pink-accent: #ff33a3;
     --text-color: #ffffff;
 }
 
@@ -14,23 +13,17 @@ body, html {
     align-items: center;
     background-color: var(--dark-bg);
     font-family: 'Orbitron', sans-serif;
-    transition: background-color 2s ease;
+    transition: background-color 2.5s ease;
 }
 
 /* Fundo Estelar */
 .background-stars {
     position: fixed;
     width: 200%; height: 200%;
-    background: radial-gradient(circle at center, rgba(10, 10, 30, 0) 0%, var(--dark-bg) 100%),
-                url('https://www.transparenttextures.com/patterns/stardust.png');
-    filter: blur(1px);
-    animation: moveStars 100s linear infinite;
+    background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+    opacity: 0.5;
     z-index: 0;
-}
-
-@keyframes moveStars {
-    from { transform: translate(-25%, -25%); }
-    to { transform: translate(0, 0); }
+    transition: filter 2s ease;
 }
 
 .main-container {
@@ -41,50 +34,51 @@ body, html {
     align-items: center;
 }
 
-/* Brilho Pulsante Atrás do Coração */
+/* Brilho Pulsante Atrás */
 .heart-glow {
     position: absolute;
-    width: 250px; height: 250px;
-    background: radial-gradient(circle, var(--glow-color) 0%, transparent 70%);
-    filter: blur(50px);
-    opacity: 0; /* Invisível por padrão */
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    z-index: -1;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, var(--pink-accent) 0%, transparent 70%);
+    filter: blur(60px);
+    opacity: 0;
+    transition: all 0.8s ease;
     top: 50%; left: 50%;
-    transform: translate(-50%, -50%) scale(0.8);
+    transform: translate(-50%, -50%);
 }
 
-/* Efeito ao passar o mouse: Fundo pulsa borrado */
 .heart-wrapper:hover ~ .heart-glow {
-    opacity: 0.6;
+    opacity: 0.4;
     transform: translate(-50%, -50%) scale(1.2);
 }
 
+/* Wrapper do Coração */
 .heart-wrapper {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    animation: heartbeat 1.5s infinite; /* Batida constante */
-    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: heartbeat 1.5s infinite ease-in-out;
+    transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .heart-img {
-    width: 150px; /* Ajuste conforme o tamanho da sua imagem */
+    width: 180px;
     height: auto;
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
-    transition: all 0.6s ease;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+    transition: all 1s ease;
 }
 
-/* Quando Clicado */
+/* ESTADO ATIVO - CLICADO */
 .heart-wrapper.active {
-    animation: none;
-    transform: scale(2);
+    transform: scale(2.2);
+    /* Pulsação lenta após expandir */
+    animation: slowBeat 4s infinite ease-in-out 1s; 
 }
 
 .heart-wrapper.active .heart-img {
-    filter: drop-shadow(0 0 30px var(--pink-accent)) brightness(1.2);
+    /* Filtro para transformar Branco em Rosa Vibrante */
+    filter: sepia(1) saturate(10) hue-rotate(280deg) drop-shadow(0 0 20px var(--pink-accent));
 }
 
 @keyframes heartbeat {
@@ -92,51 +86,51 @@ body, html {
     50% { transform: scale(1.1); }
 }
 
-/* Texto sobre o Coração */
+@keyframes slowBeat {
+    0%, 100% { transform: scale(2.2); }
+    50% { transform: scale(2.35); }
+}
+
+/* Conteúdo Interno */
 .heart-content {
     position: absolute;
     z-index: 20;
     text-align: center;
     opacity: 0;
-    transition: opacity 0.8s ease;
-    width: 100%;
+    transition: opacity 1.5s ease 1s;
+    pointer-events: none;
 }
 
-.heart-wrapper.active .heart-content {
-    opacity: 1;
-}
+.heart-wrapper.active .heart-content { opacity: 1; }
 
 .timer-display {
-    font-size: 12px;
+    font-size: 10px;
     color: white;
+    text-shadow: 0 0 5px #000;
     font-weight: bold;
-    text-shadow: 1px 1px 10px rgba(0,0,0,0.8);
-    margin: 0;
 }
 
 .love-message {
-    margin-top: 50px;
-    font-size: 2rem;
+    margin-top: 80px;
+    font-size: 1.8rem;
     color: white;
-    text-shadow: 0 0 15px var(--pink-accent);
+    text-shadow: 0 0 20px var(--pink-accent);
     opacity: 0;
-    transform: translateY(20px);
-    transition: all 1s ease 0.5s;
+    transform: translateY(30px);
+    transition: all 1.5s ease 1.5s;
 }
 
-.love-message.show {
-    opacity: 1;
-    transform: translateY(0);
-}
+.love-message.show { opacity: 1; transform: translateY(0); }
 
-/* Mudança de clima após clique */
-body.pink-mode { background-color: #1a0510; }
-body.pink-mode .heart-glow { opacity: 0.8; filter: blur(60px); }
+/* Mudança de Ambiente */
+body.pink-mode { background-color: #1a020c; }
+body.pink-mode .heart-glow { opacity: 0.6; filter: blur(80px); }
+body.pink-mode .background-stars { filter: blur(4px) brightness(0.5); }
 
-/* Partículas */
+/* Coraçãozinhos da explosão */
 .small-heart {
     position: fixed;
-    width: 20px; height: 20px;
+    width: 15px; height: 15px;
     background-color: var(--pink-accent);
     clip-path: path('M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z');
     z-index: 100;
@@ -145,5 +139,5 @@ body.pink-mode .heart-glow { opacity: 0.8; filter: blur(60px); }
 
 @keyframes floatUp {
     0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
-    100% { transform: translate(var(--tx), var(--ty)) scale(1.5); opacity: 0; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(1.2); opacity: 0; }
 }
