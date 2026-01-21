@@ -3,27 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infinity Love</title>
+    <title>Nosso Universo</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="bg-overlay" id="bgOverlay"></div>
-    <div class="stars" id="stars"></div>
+    <div class="background-stars" id="backgroundStars"></div>
+    <div class="vignette"></div>
 
-    <div class="container">
-        <div class="heart-aura" id="aura"></div>
-
-        <div class="heart-main" id="heart">
-            <div class="heart-inner-content" id="content">
-                <div id="timer"></div>
+    <div class="main-container" id="mainContainer">
+        <div id="heartGlow" class="heart-glow"></div>
+        <div id="mainHeart" class="heart-icon">
+            <div id="heartContent" class="heart-content">
+                <p id="timer" class="timer-display"></p>
             </div>
         </div>
-
-        <h1 class="love-text" id="loveText">Eu te amo</h1>
+        <div id="smallHeartsContainer" class="small-hearts-container"></div>
+        <p id="loveMessage" class="love-message">Eu te amo</p>
     </div>
-
-    <div id="particles-container"></div>
 
     <script src="script.js"></script>
 </body>
