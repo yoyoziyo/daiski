@@ -1,72 +1,80 @@
-const heart = document.getElementById('heart');
-const aura = document.getElementById('aura');
+const mainHeart = document.getElementById('mainHeart');
+const heartContent = document.getElementById('heartContent');
 const timerDisplay = document.getElementById('timer');
-const loveText = document.getElementById('loveText');
-const bgOverlay = document.getElementById('bgOverlay');
-const stars = document.getElementById('stars');
+const loveMessage = document.getElementById('loveMessage');
+const backgroundStars = document.getElementById('backgroundStars');
+const smallHeartsContainer = document.getElementById('smallHeartsContainer');
 
-let clicked = false;
-const startDate = new Date('2025-02-25T00:00:00');
+let isHeartClicked = false;
+const startDate = new Date('2025-02-25T00:00:00'); // Data de início
 
-heart.addEventListener('click', () => {
-    if (!clicked) {
-        clicked = true;
+mainHeart.addEventListener('click', () => {
+    if (!isHeartClicked) {
+        isHeartClicked = true;
 
-        // Ativar classes de animação
-        heart.classList.add('active');
-        loveText.style.opacity = '1';
-        loveText.style.transform = 'translateY(0)';
-        bgOverlay.classList.add('bg-active');
-        stars.classList.add('blur-stars');
-        document.getElementById('content').style.opacity = '1';
+        // 1. Animação do coração principal
+        mainHeart.classList.add('active');
+        mainHeart.style.pointerEvents = 'none'; // Desabilita cliques futuros no coração principal
 
-        startTimer();
-        createParticles();
+        // 2. Mudança de fundo e desfoque
+        document.body.classList.add('pink-mode');
+        backgroundStars.classList.add('blurred');
+
+        // 3. Exibe o conteúdo do coração e a mensagem "Eu te amo"
+        setTimeout(() => {
+            heartContent.classList.add('show'); // A classe 'show' no CSS controla a opacidade
+            loveMessage.classList.add('show');
+            startTimer();
+        }, 800); // Pequeno atraso para o coração principal se expandir
+
+        // 4. Cria e anima os corações pequenos
+        createSmallHearts();
     }
 });
 
 function startTimer() {
-    const update = () => {
-        const now = new Date();
-        const diff = now - startDate;
-
-        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        const m = Math.floor((diff / (1000 * 60)) % 60);
-        const s = Math.floor((diff / 1000) % 60);
-
-        timerDisplay.innerHTML = `${d}D ${h}H ${m}M ${s}S`;
-    };
-    update();
-    setInterval(update, 1000);
+    // Garante que o contador comece imediatamente e atualize a cada segundo
+    updateTimer();
+    setInterval(updateTimer, 1000);
 }
 
-function createParticles() {
-    for (let i = 0; i < 100; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        
-        // Posição inicial (centro)
-        const x = window.innerWidth / 2;
-        const y = window.innerHeight / 2;
-        p.style.left = x + 'px';
-        p.style.top = y + 'px';
-        
-        document.body.appendChild(p);
-        
-        // Movimento aleatório de explosão
-        const destX = (Math.random() - 0.5) * 1000;
-        const destY = (Math.random() - 0.5) * 1000;
-        
-        const animation = p.animate([
-            { transform: 'translate(0, 0) scale(1)', opacity: 1 },
-            { transform: `translate(${destX}px, ${destY}px) scale(0)`, opacity: 0 }
-        ], {
-            duration: 2000 + Math.random() * 2000,
-            easing: 'cubic-bezier(0, .9, .57, 1)',
-            delay: Math.random() * 200
-        });
+function updateTimer() {
+    const now = new Date();
+    const diff = now - startDate;
 
-        animation.onfinish = () => p.remove();
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    timerDisplay.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
+
+function createSmallHearts() {
+    const numberOfHearts = 20; // Quantidade de corações pequenos
+    for (let i = 0; i < numberOfHearts; i++) {
+        const smallHeart = document.createElement('div');
+        smallHeart.classList.add('small-heart');
+
+        // Posição inicial aleatória perto do coração principal
+        const mainHeartRect = mainHeart.getBoundingClientRect();
+        const startX = mainHeartRect.left + mainHeartRect.width / 2;
+        const startY = mainHeartRect.top + mainHeartRect.height / 2;
+
+        smallHeart.style.left = `${startX + (Math.random() - 0.5) * 50}px`;
+        smallHeart.style.top = `${startY + (Math.random() - 0.5) * 50}px`;
+        
+        // Define uma var CSS para a animação ter um X final aleatório
+        smallHeart.style.setProperty('--random-x', `${(Math.random() - 0.5) * 400}px`);
+
+        // Atraso para que os corações surjam em sequência
+        smallHeart.style.animationDelay = `${i * 0.1}s`; 
+        
+        smallHeartsContainer.appendChild(smallHeart);
+
+        // Remove o coração pequeno após a animação para limpar o DOM
+        smallHeart.addEventListener('animationend', () => {
+            smallHeart.remove();
+        });
     }
 }
